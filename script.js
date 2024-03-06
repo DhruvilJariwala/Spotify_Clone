@@ -58,7 +58,6 @@ async function getsongs(folder){
     Array.from(document.querySelector(".songlist").getElementsByTagName("li")).forEach(e => {
       e.addEventListener("click",element=>{
           playMusic(e.querySelector(".info").firstElementChild.innerHTML.trim())
-          console.log(e)
       })
 
     })
@@ -114,7 +113,10 @@ async function displayalbums(){
     Array.from(document.getElementsByClassName("card")).forEach(e=>{
       e.addEventListener("click",async item=>{
        song = await getsongs(`Songs/${item.currentTarget.dataset.folder}`)
-       playMusic(song[0])
+       playMusic(song[0],true)
+       if(play.src="icons/pause.svg"){
+        play.src="icons/play.svg"
+      }
       })
     })
 
@@ -141,6 +143,7 @@ async function main(){
    
     document.querySelector(".songtime").innerHTML=`${secondsToMinutesSeconds(currentsong.currentTime)} / ${secondsToMinutesSeconds(currentsong.duration)}`
     document.querySelector(".circle").style.left=((currentsong.currentTime/currentsong.duration)*100)-1+"%"
+    
   })
   document.querySelector(".seekbar").addEventListener("click", e=>{
     let percent= ((e.offsetX/e.target.getBoundingClientRect().width)*100)
@@ -195,12 +198,13 @@ async function main(){
   }
   })
   function pn(){
-    if(secondsToMinutesSeconds(currentsong.currentTime)==secondsToMinutesSeconds(currentsong.duration)){
-      let folder=currentsong.src.split("/").slice(-2)[0]
-      let index=song.indexOf(currentsong.src.split(`/${folder}/`)[1])
-      if([index+1]<song.length){
+    if(!currentsong.paused && secondsToMinutesSeconds(currentsong.duration)!="00:00"){
+      if(secondsToMinutesSeconds(currentsong.currentTime)==secondsToMinutesSeconds(currentsong.duration)){
+        let folder=currentsong.src.split("/").slice(-2)[0]
+        let index=song.indexOf(currentsong.src.split(`/${folder}/`)[1])
+        if([index+1]<song.length){
        playMusic(song[index+1].replaceAll("%20"," "))
-    }}
+      }}}
   }
   setInterval(pn,1000)
   
