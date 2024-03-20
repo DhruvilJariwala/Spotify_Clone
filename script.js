@@ -18,7 +18,7 @@ function secondsToMinutesSeconds(seconds) {
 }
 async function getsongs(folder){
     currFolder=folder
-    let a = await fetch(`/${currFolder}/`)
+    let a = await fetch(`${currFolder}/`)
     let response = await a.text()
     let div = document.createElement("div")
     div.innerHTML=response;
@@ -28,7 +28,7 @@ async function getsongs(folder){
     for (let index = 0; index < links.length; index++) {
         const element = links[index];
             if(element.href.endsWith(".mp3")){
-                songs.push(element.href.split(`/${currFolder}/`)[1])
+                songs.push(element.href.split(`${currFolder}/`)[1])
             }
     }
 
@@ -36,7 +36,7 @@ async function getsongs(folder){
     songul.innerHTML=""
     playMusic(songs[0],true)
     for (const song of songs) {
-      let a1= await fetch(`/${currFolder}/metadata.json`)
+      let a1= await fetch(`${currFolder}/metadata.json`)
       let r1= await a1.json()
       let artist1
       for(i=0;i<r1.length;i++){
@@ -67,10 +67,10 @@ async function getsongs(folder){
 
 const playMusic=(track,pause=false)=>{
   if(!track.endsWith(".mp3")){
-    currentsong.src=`/${currFolder}/`+ track +".mp3"
+    currentsong.src=`${currFolder}/`+ track +".mp3"
   }
   else{
-    currentsong.src=`/${currFolder}/`+ track 
+    currentsong.src=`${currFolder}/`+ track 
   }
   if(!pause){
     currentsong.play()
@@ -82,7 +82,7 @@ const playMusic=(track,pause=false)=>{
 }
 
 async function displayalbums(){
-  let a = await fetch(`/Songs`)
+  let a = await fetch(`Songs`)
     let response = await a.text()
    
     let div = document.createElement("div")
